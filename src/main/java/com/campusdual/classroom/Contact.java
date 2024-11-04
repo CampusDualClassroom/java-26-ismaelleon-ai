@@ -1,5 +1,7 @@
 package com.campusdual.classroom;
 
+import com.campusdual.util.Utils;
+
 import java.text.Normalizer;
 
 public class Contact implements ICallActions{
@@ -8,14 +10,19 @@ public class Contact implements ICallActions{
     private String surname;
     private String phoneNumber;
     private String code;
+    private final String MY_NUMBER = "634718713";
 
+    public Contact() {
+
+    }
 
     public Contact(String name, String surname, String phoneNumber) {
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
-        this.code = code; //generateCode(name,surname);
+        this.code = code;
     }
+
 
     public String getName() {
         return name;
@@ -66,17 +73,28 @@ public class Contact implements ICallActions{
     }
 
     @Override
-    public void callMyNumber() {
+    public void callOtherNumber(String number) {
+        System.out.println("Llamando al número: " + name);
 
     }
 
     @Override
-    public void callOtherNumber(String number) {
+    public void callMyNumber() {
 
+        if (MY_NUMBER == phoneNumber) {
+            System.out.println("Llamando a mi propio número: " + this.phoneNumber);
+
+        } else {
+            System.out.println("Llamando a " + this.phoneNumber);
+
+        }
     }
 
     @Override
     public void showContactDetails() {
+        System.out.println("Nombre completo: " + getName() + " " + getSurname());
 
     }
+
+
 }
