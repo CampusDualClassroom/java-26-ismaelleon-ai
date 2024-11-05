@@ -73,8 +73,8 @@ public class Contact implements ICallActions{
     }
 
     @Override
-    public void callOtherNumber(String number) {
-        System.out.println("Llamando al número: " + name);
+    public void callOtherNumber(String phoneNumber) {
+        System.out.println("Llamando al número: " + getName());
 
     }
 

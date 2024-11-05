@@ -7,7 +7,7 @@ public interface ICallActions {
     //que el propio contacto se está llamando a sí mismo, y especificar
     //cuál es su número de teléfono
 
-    void callOtherNumber(String number);
+    void callOtherNumber(String phoneNumber);
     //Este método tendrá que indicar con un mensaje escrito por consola
     //que el propio contacto se está llamando a un número de teléfono
     //que se le facilita por parámetro
