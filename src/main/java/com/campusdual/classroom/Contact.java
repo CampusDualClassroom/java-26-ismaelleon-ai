@@ -7,8 +7,8 @@ import java.text.Normalizer;
 public class Contact implements ICallActions{
 
     private String name;
-    private String surname;
-    private String phoneNumber;
+    private String surnames;
+    private String phone;
     private String code;
     private final String MY_NUMBER = "634718713";
 
@@ -18,9 +18,9 @@ public class Contact implements ICallActions{
 
     public Contact(String name, String surname, String phoneNumber) {
         this.name = name;
-        this.surname = surname;
-        this.phoneNumber = phoneNumber;
-        this.code = code;
+        this.surnames = surname;
+        this.phone = phoneNumber;
+        this.code = generateCode(name,surname);
     }
 
 
@@ -32,40 +32,56 @@ public class Contact implements ICallActions{
         this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getSurnames() {
+        return surnames;
     }
 
     public void setSurname(String surname) {
-        this.surname = surname;
+        this.surnames = surname;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.phone = phoneNumber;
     }
 
     public void setCode(String code) {
         this.code = code;
     }
 
-    //private String generateCode(String firstName, String lastName) {
-    //    String normalizedLastName = Normalizer.normalize(lastName, Normalizer.Form.NFD)
-    //            .replaceAll("[^\\p{ASCII}]", "").toLowerCase().replace(" ", "");
-//
-    //    if (!lastName.contains(" ")) {
-    //        return firstName.charAt(0) + normalizedLastName;
-    //    }
-//
-    //    String[] lastNames = lastName.toLowerCase().split(" ");
-    //    String code = firstName.substring(0, 1) + lastNames[0].charAt(0) + lastNames[1];
-    //    System.out.println(code);
-    //    return code;
-//
-    //}
+    private String generateCode(String firstName, String lastName) {
+        String lowerName = this.name.toLowerCase();
+        String lowerSurnames = this.surnames.toLowerCase();
+
+        String diacriticsName = Normalizer.normalize(lowerName, Normalizer.Form.NFD);
+        String diacriticsSurnames = Normalizer.normalize(lowerSurnames, Normalizer.Form.NFD);
+
+        String perfectName = diacriticsName.replaceAll("[^\\p{ASCII}]", "");
+        String perfectSurnames = diacriticsSurnames.replaceAll("[^\\p{ASCII}]", "");
+
+        String[] nameParts = perfectName.split(" ");
+        String[] surnamesPart = perfectSurnames.split(" ");
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(nameParts[0].charAt(0));
+
+        if(perfectSurnames.contains(" ")) {
+
+            sb.append(surnamesPart[0].charAt(0));
+            for (int i = 1; i < surnamesPart.length; i++) {
+                sb.append(surnamesPart[i]);
+            }
+        }
+        else {
+            sb.append(perfectSurnames);
+        }
+
+        return sb.toString();
+    }
 
     public String getCode(){
 
@@ -74,25 +90,25 @@ public class Contact implements ICallActions{
 
     @Override
     public void callOtherNumber(String phoneNumber) {
-        System.out.println("Llamando al número: " + getName());
+        System.out.println("Llamando al número: " + this.phone+ this.name + this.surnames + phoneNumber);
 
     }
 
     @Override
     public void callMyNumber() {
 
-        if (MY_NUMBER == phoneNumber) {
-            System.out.println("Llamando a mi propio número: " + this.phoneNumber);
+        if (MY_NUMBER == phone) {
+            System.out.println("Llamando a mi propio número: " + MY_NUMBER);
 
         } else {
-            System.out.println("Llamando a " + this.phoneNumber);
+            System.out.println("Llamando a " + this.name + " " + this.phone + this.surnames);
 
         }
     }
 
     @Override
     public void showContactDetails() {
-        System.out.println("Nombre completo: " + getName() + " " + getSurname());
+        System.out.println("Nombre completo: " + this.name + " " + this.surnames + this.phone + this.code);
 
     }
 

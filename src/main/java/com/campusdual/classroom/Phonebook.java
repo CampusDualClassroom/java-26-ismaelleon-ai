@@ -6,7 +6,7 @@
     import java.util.Map;
     import java.util.Scanner;
 
-    public class Phonebook extends Contact{
+    public class Phonebook{
 
         public static Map<String, Contact> contactMap = new HashMap<>();
         private Contact contact1 = new Contact("Javier", "López","1");
@@ -16,16 +16,16 @@
         private Contact contact5 = new Contact("Esteban","Serrano del Río","5");
         private Contact contact6 = new Contact("Fernando Miguel","Juan de los Santos Requejo León","6");
 
-        public Phonebook(String name, String surname, String phoneNumber) {
-            super(name, surname, phoneNumber);
-        }
-
         public Phonebook() {
 
         }
 
+        public Map<String, Contact> getData() {
+            return contactMap;
+        }
+
         public void initialContacts () {
-            contactMap.put("ileon",contact1);
+            contactMap.put("jlopez",contact1);
             contactMap.put("cfernandez-simon",contact2);
             contactMap.put("jsoria",contact3);
             contactMap.put("sfrocha",contact4);
@@ -33,57 +33,42 @@
             contactMap.put("fjdelossantosrequejoleon",contact6);
         }
 
-        public void addContact () {
+        public void addContact (Contact contact) {
 
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Ingrese nombre: ");
-            String name = scanner.nextLine();
-            System.out.println("Ingrese apellidos: ");
-            String surname = scanner.nextLine();
-            System.out.println("Ingrese numero telefonico: ");
-            String phoneNumber = scanner.nextLine();
-            System.out.println("Ingrese código: ");
-            String code = scanner.nextLine();
-
-            Contact contact = new Contact(name, surname,phoneNumber);
-            contactMap.put(code, contact);
-            System.out.println("Contacto añadido");
+            contactMap.put(contact.getCode(), contact);
+            System.out.println("Contacto añadido: " + contact.getCode());
 
         }
 
-
-        public void showAllContacts () {
+        public void showPhonebook () {
             for (Map.Entry<String, Contact> entry:contactMap.entrySet()) {
                 Contact contact = entry.getValue();
 
+
                 System.out.println("___________________");
                 System.out.println("Clave: " + entry.getKey());
-                System.out.println("Nombre completo: " + contact.getName() + " " + contact.getSurname());
-                System.out.println("Número de telefono: " + contact.getPhoneNumber());
+                System.out.println("Nombre completo: " + contact.getName() + " " + contact.getSurnames());
+                System.out.println("Número de telefono: " + contact.getPhone());
                 System.out.println("___________________");
             }
         }
 
-        public void deleteContact () {
+        public void deleteContact (String code) {
 
-            showAllContacts();
-            System.out.println("Elija el contacto a eliminar: ");
-            Scanner scanner = new Scanner(System.in);
-            String codeD = scanner.nextLine();
-            if (contactMap.remove(codeD) !=null) {
+            if (contactMap.remove(code) !=null) {
                 System.out.println("Contacto eliminado");
             } else {
                 System.out.println("No se encontró contacto con ese código");
-                deleteContact();
             }
         }
 
         public void selectContact() {
 
-            showAllContacts();
+            showPhonebook();
             System.out.println("Introduzca la clave del contacto para seleccionarlo: ");
             Scanner scanner = new Scanner(System.in);
             String key = scanner.nextLine();
+            Contact selectedContact = contactMap.get(key);
             if (key !=null) {
                 int input2;
                 do {
@@ -96,16 +81,17 @@
                     scanner.nextLine();
 
                     switch (input2) {
-                        case 1: callMyNumber();
+                        case 1: selectedContact.callMyNumber();
                         break;
 
                         case 2: {
                             Scanner scanner2 = new Scanner(System.in);
-                            callOtherNumber(scanner2.nextLine());
+                            String otherNumber = scanner2.nextLine();
+                            selectedContact.callOtherNumber(otherNumber);
                             break;
                         }
 
-                        case 3:showContactDetails();
+                        case 3: selectedContact.showContactDetails();
                         break;
 
                         case 4: mainMenu();
@@ -132,21 +118,37 @@
 
                 switch (input1) {
 
-                    case 1 : addContact();
+                    case 1 : {
+
+                        Scanner scanner5 = new Scanner(System.in);
+                        System.out.println("Ingrese nombre: ");
+                        String name = scanner5.nextLine();
+                        System.out.println("Ingrese apellidos: ");
+                        String surname = scanner5.nextLine();
+                        System.out.println("Ingrese numero telefonico: ");
+                        String phoneNumber = scanner5.nextLine();
+                        Contact newContact = new Contact(name, surname,phoneNumber);
+                        addContact(newContact);
+                    }
                     break;
 
-                    case 2 : showAllContacts();
+                    case 2 : showPhonebook();
                     break;
 
                     case 3 : selectContact();
                     break;
 
-                    case 4 : deleteContact();
+                    case 4 : {
+                        showPhonebook();
+                        System.out.println("Elija el contacto a eliminar: ");
+                        Scanner scanner1 = new Scanner(System.in);
+                        String code = scanner1.nextLine();
+                        deleteContact(code);
+                    }
                     break;
 
                     case 5:
                         System.out.println("Saliendo...");
-                        mainMenu();
                         return;
                 }
 
